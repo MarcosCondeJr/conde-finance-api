@@ -1,8 +1,8 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
-import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(@RequestBody UserRequestDTO user) {
+    public String createUser(@Valid @RequestBody UserRequestDTO user) {
         return this.service.createUser(user);
     }
 }
