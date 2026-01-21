@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.marcoscondejr.conde_finance_api.entity.User;
+import com.marcoscondejr.conde_finance_api.exception.InvalidTokenException;
+import com.marcoscondejr.conde_finance_api.exception.TokenCreationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ public class TokenService {
                     .withExpiresAt(this.getExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException ex) {
-            throw new RuntimeException("Erro ao gerar o token: ", ex);
+            throw new TokenCreationException("Erro ao gerar o token: ", ex);
         }
     }
 
@@ -42,7 +44,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException ex) {
-            throw new RuntimeException("Token inválido: ", ex);
+            throw new InvalidTokenException("Token inválido: ", ex);
         }
     }
 
