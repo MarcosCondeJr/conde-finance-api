@@ -1,10 +1,7 @@
 package com.marcoscondejr.conde_finance_api.entity;
 
 import com.marcoscondejr.conde_finance_api.enums.UserRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +27,8 @@ public class User implements UserDetails {
     private String email;
     private String login;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(String name, String email, String login, String password, UserRole role) {

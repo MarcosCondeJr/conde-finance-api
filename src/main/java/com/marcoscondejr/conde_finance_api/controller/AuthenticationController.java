@@ -1,7 +1,9 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.AuthenticationDTO;
+import com.marcoscondejr.conde_finance_api.dto.LoginResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.UserResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.infra.security.TokenService;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
@@ -38,9 +40,10 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = this.tokenService.generateToken((User) auth.getPrincipal());
+        User user = (User) auth.getPrincipal();
+        String token = this.tokenService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new LoginResponseDTO(UserResponseDTO.fromEntity(user), token));
     }
 
     @PostMapping("/register")
