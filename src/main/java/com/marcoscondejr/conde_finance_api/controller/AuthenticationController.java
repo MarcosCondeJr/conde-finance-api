@@ -3,6 +3,7 @@ package com.marcoscondejr.conde_finance_api.controller;
 import com.marcoscondejr.conde_finance_api.dto.AuthenticationDTO;
 import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.entity.User;
+import com.marcoscondejr.conde_finance_api.infra.security.TokenService;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,17 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = this.tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register")
