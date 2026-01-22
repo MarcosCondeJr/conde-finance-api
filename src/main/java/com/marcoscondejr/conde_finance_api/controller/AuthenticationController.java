@@ -38,13 +38,18 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        User user = (User) auth.getPrincipal();
-        String token = this.tokenService.generateToken(user);
+            User user = (User) auth.getPrincipal();
+            String token = this.tokenService.generateToken(user);
 
-        return ResponseEntity.ok(new LoginResponseDTO(UserResponseDTO.fromEntity(user), token));
+            return ResponseEntity.ok(new LoginResponseDTO(UserResponseDTO.fromEntity(user), token));
+        } catch (Exception e) {
+            System.out.println("Esse é oerror: "+ e.getClass().getName());
+            throw e;
+        }
     }
 
     @PostMapping("/register")
