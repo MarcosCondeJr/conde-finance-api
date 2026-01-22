@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.LoginResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.UserResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.User;
+import com.marcoscondejr.conde_finance_api.exception.UserAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.infra.security.TokenService;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -49,7 +50,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid UserRequestDTO data) {
         if (this.repository.findByLogin(data.login()) != null) {
-            return ResponseEntity.badRequest().build();
+            throw new UserAlreadyExistsException();
         }
 
         String hashPassword = this.passwordEncoder.encode(data.password());

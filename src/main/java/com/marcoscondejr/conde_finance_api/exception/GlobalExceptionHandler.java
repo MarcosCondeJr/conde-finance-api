@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,5 +29,30 @@ public class GlobalExceptionHandler {
         error.setFields(fieldsError);
 
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        return buildError(HttpStatus.UNAUTHORIZED, "Login ou senha inválidos.");
+    }
+
+    @ExceptionHandler({TokenCreationException.class, InvalidTokenException.class})
+    public ResponseEntity<ErrorResponse> handleTokenErrors(RuntimeException ex) {
+        return buildError(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserExists(UserAlreadyExistsException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    public ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
+        ErrorResponse error = new ErrorResponse();
+
+        error.setStatus(status.value());
+        error.setTimestamp(OffsetDateTime.now());
+        error.setTitle(message);
+
+        return ResponseEntity.status(status).body(error);
     }
 }
