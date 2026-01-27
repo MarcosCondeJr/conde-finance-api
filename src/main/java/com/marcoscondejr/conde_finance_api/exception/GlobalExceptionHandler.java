@@ -47,6 +47,13 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(BankAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleBankAlreadyExists(
+            BankAlreadyExistsException ex
+    ) {
+        return this.buildError(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse();
 
