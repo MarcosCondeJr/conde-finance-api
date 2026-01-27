@@ -1,6 +1,7 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.BankRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.BankUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.service.BankService;
 import jakarta.validation.Valid;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.List;
 
 @RestController
@@ -24,10 +24,23 @@ public class BankController {
         return this.service.loadBanks();
     }
 
+    @GetMapping("/{id}")
+    public Bank getBankById(@PathVariable("id") String id) {
+        return this.service.getBankById(Long.parseLong(id));
+    }
+
     @PostMapping
     public ResponseEntity<?> saveBank(@RequestBody @Valid BankRequestDTO data) {
         Bank bank = this.service.saveBank(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(bank);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateBank(
+            @PathVariable("id") String id, @RequestBody @Valid BankUpdateDTO data
+    ) {
+        Bank bank = this.service.updateBank(Long.parseLong(id), data);
+        return ResponseEntity.status(HttpStatus.OK).body(bank);
     }
 
     @DeleteMapping("/{id}")
