@@ -54,6 +54,12 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleObjectNotFound(
+            ObjectNotFoundException ex
+    ) {
+        return this.buildError(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse();
 
