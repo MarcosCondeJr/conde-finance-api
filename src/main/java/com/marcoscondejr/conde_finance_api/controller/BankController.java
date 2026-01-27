@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Parser;
 import java.util.List;
 
 @RestController
@@ -23,9 +24,15 @@ public class BankController {
         return this.service.loadBanks();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> saveBank(@RequestBody @Valid BankRequestDTO data) {
         Bank bank = this.service.saveBank(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(bank);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBank(@PathVariable("id") String id) {
+        this.service.deleteBank(Long.parseLong(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

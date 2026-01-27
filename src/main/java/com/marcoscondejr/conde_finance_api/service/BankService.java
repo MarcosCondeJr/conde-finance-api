@@ -3,6 +3,7 @@ package com.marcoscondejr.conde_finance_api.service;
 import com.marcoscondejr.conde_finance_api.dto.BankRequestDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
+import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,13 @@ public class BankService {
         bank.setName(data.name());
 
         return this.repository.save(bank);
+    }
+
+    public void deleteBank(Long id) {
+        if (!this.repository.existsById(id)) {
+            throw new ObjectNotFoundException("Banco com id " + id + " não encontrado");
+        }
+
+        this.repository.deleteById(id);
     }
 }
