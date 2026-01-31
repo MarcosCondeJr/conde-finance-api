@@ -1,9 +1,6 @@
 package com.marcoscondejr.conde_finance_api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -25,5 +22,8 @@ public class Account {
 
     private Long bankId;
 
-    private double openingBalance;
+    private double initialBalance;
+
+    @Column(nullable = false)
+    private boolean active = true;
 }
