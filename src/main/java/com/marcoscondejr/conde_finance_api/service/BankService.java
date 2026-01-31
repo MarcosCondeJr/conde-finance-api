@@ -1,7 +1,7 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.dto.BankRequestDTO;
-import com.marcoscondejr.conde_finance_api.dto.BankUpdateDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;

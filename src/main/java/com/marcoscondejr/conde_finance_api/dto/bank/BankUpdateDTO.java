@@ -1,4 +1,4 @@
-package com.marcoscondejr.conde_finance_api.dto;
+package com.marcoscondejr.conde_finance_api.dto.bank;
 
 import jakarta.validation.constraints.Size;
 

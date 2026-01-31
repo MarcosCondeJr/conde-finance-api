@@ -1,9 +1,9 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
-import com.marcoscondejr.conde_finance_api.dto.AuthenticationDTO;
-import com.marcoscondejr.conde_finance_api.dto.LoginResponseDTO;
-import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
-import com.marcoscondejr.conde_finance_api.dto.UserResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.auth.AuthenticationDTO;
+import com.marcoscondejr.conde_finance_api.dto.auth.LoginResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.user.UserRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.user.UserResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.UserAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.infra.security.TokenService;

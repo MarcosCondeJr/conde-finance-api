@@ -1,4 +1,4 @@
-package com.marcoscondejr.conde_finance_api.dto;
+package com.marcoscondejr.conde_finance_api.dto.user;
 
 import com.marcoscondejr.conde_finance_api.enums.UserRole;
 import jakarta.validation.constraints.*;

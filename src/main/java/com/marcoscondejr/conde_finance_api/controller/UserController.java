@@ -1,6 +1,6 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
-import com.marcoscondejr.conde_finance_api.dto.UserRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.user.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

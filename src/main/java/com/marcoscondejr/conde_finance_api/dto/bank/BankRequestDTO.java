@@ -1,6 +1,5 @@
-package com.marcoscondejr.conde_finance_api.dto;
+package com.marcoscondejr.conde_finance_api.dto.bank;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
