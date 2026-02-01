@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Boolean existsByBankId(Long bankId);
+    Boolean existsByBankIdAndUserId(Long bankId, Long UserId);
 }

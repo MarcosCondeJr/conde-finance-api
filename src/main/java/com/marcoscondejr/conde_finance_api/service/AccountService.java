@@ -3,8 +3,12 @@ package com.marcoscondejr.conde_finance_api.service;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.Account;
+import com.marcoscondejr.conde_finance_api.entity.Bank;
+import com.marcoscondejr.conde_finance_api.exception.AccountAlreadyExistsException;
+import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
+import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,9 @@ public class AccountService extends BaseService {
 
     @Autowired
     private AccountRepository repository;
+
+    @Autowired
+    private BankRepository bankRepository;
 
     public List<Account> getAccounts() {
         return this.repository.findAll();
@@ -34,14 +41,26 @@ public class AccountService extends BaseService {
     public AccountResponseDTO saveAccount(AccountRequestDTO data) {
         Long userId = this.getCurrentUserId();
 
+        if (this.repository.existsByBankIdAndUserId(data.bankId(), userId)) {
+            throw new AccountAlreadyExistsException("Já existe uma conta cadastrada com esse banco");
+        }
+
+        Bank bank = this.bankRepository.findById(data.bankId())
+                .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrado"));
+
+        if (!bank.getActive()) {
+            throw new ObjectNotFoundException("Banco inativo");
+        }
+
         Account account = new Account();
         account.setDescription(data.description());
         account.setBankId(data.bankId());
         account.setInitialBalance(data.initialBalance());
         account.setUserId(userId);
 
-        return AccountResponseDTO.fromEntity(account);
+        Account accountSave = this.repository.save(account);
 
+        return AccountResponseDTO.fromEntity(accountSave);
     }
 
 //    private Account updateAccount()
