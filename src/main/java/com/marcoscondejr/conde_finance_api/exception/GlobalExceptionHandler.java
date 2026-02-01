@@ -54,6 +54,13 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(AccountAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAccountAlreadyExists(
+            AccountAlreadyExistsException ex
+    ) {
+        return this.buildError(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleObjectNotFound(
             ObjectNotFoundException ex
