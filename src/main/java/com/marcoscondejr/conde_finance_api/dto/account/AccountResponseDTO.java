@@ -2,11 +2,13 @@ package com.marcoscondejr.conde_finance_api.dto.account;
 
 import com.marcoscondejr.conde_finance_api.entity.Account;
 
+import java.math.BigDecimal;
+
 public record AccountResponseDTO(
         Long id,
         Long bankId,
         String description,
-        double initialBalance,
+        BigDecimal initialBalance,
         boolean active
 ) {
     public static AccountResponseDTO fromEntity(Account accountd) {

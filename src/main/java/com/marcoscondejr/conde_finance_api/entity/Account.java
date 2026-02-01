@@ -3,6 +3,8 @@ package com.marcoscondejr.conde_finance_api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "account")
 @Getter
@@ -22,7 +24,7 @@ public class Account {
 
     private Long bankId;
 
-    private double initialBalance;
+    private BigDecimal initialBalance;
 
     @Column(nullable = false)
     private boolean active = true;
