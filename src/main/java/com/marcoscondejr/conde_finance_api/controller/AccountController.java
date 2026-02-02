@@ -6,6 +6,8 @@ import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,17 +20,26 @@ public class AccountController {
     private AccountService service;
 
     @GetMapping
-    public List<Account> getAccounts() {
-        return this.service.getAccounts();
+    public ResponseEntity<List<Account>> getAccounts() {
+        List<Account> accounts = this.service.getAccounts();
+        return ResponseEntity.status(HttpStatus.OK).body(accounts);
     }
 
     @GetMapping("/{id}")
-    public AccountResponseDTO getAccountById(@PathVariable("id") String id) {
-        return this.service.getAccountById(Long.parseLong(id));
+    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable("id") String id) {
+        AccountResponseDTO account = this.service.getAccountById(Long.parseLong(id));
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
     @PostMapping
-    public AccountResponseDTO saveAccount(@RequestBody @Valid AccountRequestDTO data) {
-        return this.service.saveAccount(data);
+    public ResponseEntity<AccountResponseDTO> saveAccount(@RequestBody @Valid AccountRequestDTO data) {
+        AccountResponseDTO account = this.service.saveAccount(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
+        this.service.deleteAccount(Long.parseLong(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

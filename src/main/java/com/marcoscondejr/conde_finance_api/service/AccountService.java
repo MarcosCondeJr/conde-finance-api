@@ -65,5 +65,9 @@ public class AccountService extends BaseService {
 
 //    private Account updateAccount()
 
-//    private void deleteAccount()
+    public void deleteAccount(Long id) {
+        this.getAccountById(id);
+
+        this.repository.deleteById(id);
+    }
 }
