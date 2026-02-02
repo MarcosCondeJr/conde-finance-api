@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable("id") String id) {
-        AccountResponseDTO account = this.service.getAccountById(Long.parseLong(id));
+    public ResponseEntity<Account> getAccountById(@PathVariable("id") String id) {
+        Account account = this.service.getAccountById(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
@@ -35,6 +36,14 @@ public class AccountController {
     public ResponseEntity<AccountResponseDTO> saveAccount(@RequestBody @Valid AccountRequestDTO data) {
         AccountResponseDTO account = this.service.saveAccount(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AccountResponseDTO> updateAccount(
+            @PathVariable("id") String id, @RequestBody @Valid AccountUpdateDTO data
+    ) {
+        AccountResponseDTO account = this.service.updateAccount(Long.parseLong(id), data);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
     @DeleteMapping("/{id}")

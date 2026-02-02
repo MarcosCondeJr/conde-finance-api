@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.service;
 
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.exception.AccountAlreadyExistsException;
@@ -28,14 +29,14 @@ public class AccountService extends BaseService {
         return this.repository.findAll();
     }
 
-    public AccountResponseDTO getAccountById(Long id) {
+    public Account getAccountById(Long id) {
         Optional<Account> account = this.repository.findById(id);
 
         if (account.isEmpty()) {
             throw new ObjectNotFoundException("Conta com id " + id + " não encontrado");
         }
 
-        return AccountResponseDTO.fromEntity(account.get());
+        return account.get();
     }
 
     public AccountResponseDTO saveAccount(AccountRequestDTO data) {
@@ -63,7 +64,34 @@ public class AccountService extends BaseService {
         return AccountResponseDTO.fromEntity(accountSave);
     }
 
-//    private Account updateAccount()
+    public AccountResponseDTO updateAccount(Long id, AccountUpdateDTO data) {
+        Account account = this.getAccountById(id);
+
+        Long userId = this.getCurrentUserId();
+
+        if (data.bankId() != null) {
+            if (this.repository.existsByBankIdAndUserId(data.bankId(), userId)) {
+                throw new AccountAlreadyExistsException("Já existe uma conta cadastrada com esse banco");
+            }
+
+            Bank bank = this.bankRepository.findById(data.bankId())
+                    .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrado"));
+
+            account.setBankId(data.bankId());
+        }
+
+        if (data.description() != null) {
+            account.setDescription(data.description());
+        }
+
+        if (data.initialBalance() != null) {
+            account.setInitialBalance(data.initialBalance());
+        }
+
+        this.repository.save(account);
+
+        return AccountResponseDTO.fromEntity(account);
+    }
 
     public void deleteAccount(Long id) {
         this.getAccountById(id);
