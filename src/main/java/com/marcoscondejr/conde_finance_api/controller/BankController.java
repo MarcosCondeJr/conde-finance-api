@@ -20,13 +20,15 @@ public class BankController {
     private BankService service;
 
     @GetMapping
-    public List<Bank> loadBanks() {
-        return this.service.loadBanks();
+    public ResponseEntity<List<Bank>> getBanks() {
+        List<Bank> banks = this.service.getBanks();
+        return ResponseEntity.status(HttpStatus.OK).body(banks);
     }
 
     @GetMapping("/{id}")
-    public Bank getBankById(@PathVariable("id") String id) {
-        return this.service.getBankById(Long.parseLong(id));
+    public ResponseEntity<Bank> getBankById(@PathVariable("id") String id) {
+        Bank bank = this.service.getBankById(Long.parseLong(id));
+        return ResponseEntity.status(HttpStatus.OK).body(bank);
     }
 
     @PostMapping

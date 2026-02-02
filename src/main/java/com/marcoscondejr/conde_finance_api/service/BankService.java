@@ -18,7 +18,7 @@ public class BankService {
     @Autowired
     private BankRepository repository;
 
-    public List<Bank> loadBanks() {
+    public List<Bank> getBanks() {
         return this.repository.findAll();
     }
 
