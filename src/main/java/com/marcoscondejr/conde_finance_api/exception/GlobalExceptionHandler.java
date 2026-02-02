@@ -1,5 +1,8 @@
 package com.marcoscondejr.conde_finance_api.exception;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -67,6 +70,24 @@ public class GlobalExceptionHandler {
     ) {
         return this.buildError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(
+            DataIntegrityViolationException ex
+    ) {
+        String message = "Operação não permitida: registro está em uso";
+
+        if (ex.getCause() instanceof ConstraintViolationException) {
+            String rootMsg = ex.getRootCause().getMessage();
+
+            if (rootMsg.contains("fk_account_bank_id")) {
+                message = "Não é possível excluir o banco, pois existe contas vinculadas";
+            }
+        }
+
+        return this.buildError(HttpStatus.CONFLICT, message);
+    }
+
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse();
 
