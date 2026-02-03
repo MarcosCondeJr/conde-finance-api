@@ -22,7 +22,6 @@ O sistema oferece controle financeiro pessoal completo, permitindo a gestão de 
 ## 🧠 Conceitos e Tecnologias Aplicadas
 
 * **POO & SOLID:** Princípios de responsabilidade única e inversão de dependência.
-* **Generics:** Repositórios genéricos para operações CRUD.
 * **Streams & Lambdas:** Processamento eficiente de coleções e filtragem de dados.
 * **JDBC:** Comunicação direta com o banco de dados via SQL.
 * **API REST:** Manipulação de verbos HTTP, status codes e JSON.
@@ -34,13 +33,13 @@ O sistema oferece controle financeiro pessoal completo, permitindo a gestão de 
 
 ```text
 src/
- ├── config/      # Configurações de banco e servidor
- ├── controller/  # Handlers HTTP (Endpoints)
- ├── dto/         # Objetos de transferência (Request/Response)
- ├── model/       # Entidades de domínio
- ├── repository/  # Camada de persistência (Interfaces e JDBC)
- ├── service/     # Regras de negócio e lógica de Streams
- ├── exception/   # Tratamento de erros customizados
- ├── util/        # Classes utilitárias (Conexão, Formatação)
- ├── server/      # Inicialização do servidor HTTP
- └── Main.java    # Ponto de entrada
+ ├── config/         # Configurações da documentação
+ ├── controller/     # Handlers HTTP (Endpoints)
+ ├── dto/            # Objetos de transferência (Request/Response)
+ ├── entity/         # Entidades de domínio
+ ├── enums/          # Enumerações
+ ├── exception/      # Tratamento de erros customizados
+ ├── infra/security  # Infraestrutura e segurança do projeto
+ ├── repository/     # Camada de persistência (Interfaces e JDBC)
+ ├── service/        # Regras de negócio e lógica de Streams
+ └── CondeFinanceApiApplication.java    # Ponto de entrada
