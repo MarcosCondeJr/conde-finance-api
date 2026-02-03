@@ -17,6 +17,8 @@ public class Category {
     @GeneratedValue
     private Long id;
 
+    private Long userId;
+
     private String name;
 
     @Enumerated(EnumType.STRING)
