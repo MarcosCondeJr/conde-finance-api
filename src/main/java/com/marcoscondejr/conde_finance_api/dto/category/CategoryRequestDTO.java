@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.dto.category;
 
 import com.marcoscondejr.conde_finance_api.enums.CategoryType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CategoryRequestDTO(
@@ -13,7 +14,7 @@ public record CategoryRequestDTO(
         )
         String name,
 
-        @NotBlank(message = "A tipo de categoria é obrigatório")
+        @NotNull(message = "A tipo de categoria é obrigatório")
         CategoryType categoryType
 ) {
 }
