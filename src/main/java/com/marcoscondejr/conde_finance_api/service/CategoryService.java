@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.service;
 
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.exception.CategoryAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
@@ -46,6 +47,22 @@ public class CategoryService extends BaseService {
 
         Category categorySave = this.repository.save(category);
         return CategoryResponseDTO.fromEntity(categorySave);
+    }
+
+    public CategoryResponseDTO updateCategory(Long id, CategoryUpadateDTO data) {
+        Category category = this.getCategoryById(id);
+
+        if (data.name() != null) {
+            category.setName(data.name());
+        }
+
+        if (data.categoryType() != null) {
+            category.setCategoryType(data.categoryType());
+        }
+
+        this.repository.save(category);
+
+        return CategoryResponseDTO.fromEntity(category);
     }
 
     public void deleteCategory(Long id) {

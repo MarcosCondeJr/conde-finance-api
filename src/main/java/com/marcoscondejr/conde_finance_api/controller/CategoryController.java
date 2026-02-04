@@ -2,6 +2,7 @@ package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.service.CategoryService;
 import jakarta.validation.Valid;
@@ -35,6 +36,14 @@ public class CategoryController {
     public ResponseEntity<CategoryResponseDTO> saveCategory(@RequestBody @Valid CategoryRequestDTO data) {
         CategoryResponseDTO category = this.service.saveCategory(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<CategoryResponseDTO> updateCategory(
+            @PathVariable("id") String id, @RequestBody @Valid CategoryUpadateDTO data
+    ) {
+        CategoryResponseDTO category = this.service.updateCategory(Long.parseLong(id), data);
+        return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 
     @DeleteMapping("/{id}")
