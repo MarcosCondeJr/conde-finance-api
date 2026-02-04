@@ -47,4 +47,10 @@ public class CategoryService extends BaseService {
         Category categorySave = this.repository.save(category);
         return CategoryResponseDTO.fromEntity(categorySave);
     }
+
+    public void deleteCategory(Long id) {
+        this.getCategoryById(id);
+
+        this.repository.deleteById(id);
+    }
 }

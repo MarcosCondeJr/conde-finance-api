@@ -36,4 +36,10 @@ public class CategoryController {
         CategoryResponseDTO category = this.service.saveCategory(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") String id) {
+        this.service.deleteCategory(Long.parseLong(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
