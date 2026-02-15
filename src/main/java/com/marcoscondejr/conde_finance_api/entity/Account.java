@@ -20,11 +20,17 @@ public class Account {
 
     private String description;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    private Long bankId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "bank_id", nullable = false)
+    private Bank bank;
 
     private BigDecimal initialBalance;
+
+    private BigDecimal balance;
 
     @Column(nullable = false)
     private boolean active = true;
