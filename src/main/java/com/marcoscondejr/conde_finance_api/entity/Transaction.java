@@ -21,9 +21,9 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long accountId;
+    private Account account;
 
-    private Long categoryId;
+    private Category category;
 
     private LocalDate transactionDate;
 
