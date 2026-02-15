@@ -21,14 +21,14 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories() {
-        List<Category> categories = this.service.getCategories();
+    public ResponseEntity<List<CategoryResponseDTO>> getCategories() {
+        List<CategoryResponseDTO> categories = this.service.getCategories();
         return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable("id") String id) {
-        Category category = this.service.getCategoryById(Long.parseLong(id));
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable("id") String id) {
+        CategoryResponseDTO category = this.service.getCategoryById(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 

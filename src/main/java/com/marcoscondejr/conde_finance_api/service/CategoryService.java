@@ -4,6 +4,7 @@ import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Category;
+import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.CategoryAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
@@ -19,52 +20,91 @@ public class CategoryService extends BaseService {
     @Autowired
     private CategoryRepository repository;
 
-    public List<Category> getCategories() {
-        return this.repository.findAll();
+    /**
+     * Lista todas as categorias de um determinado usuário
+     *
+     * @return  CategoryResponseDTO
+     */
+    public List<CategoryResponseDTO> getCategories() {
+        Long userId = this.getCurrentUserId();
+        return this.repository.findAllByUserId(userId);
     }
 
-    public Category getCategoryById(Long id) {
-        Optional<Category> category = this.repository.findById(id);
+    /**
+     * Lista todas as categorias de um determinado usuário
+     *
+     * @param   id    Id da categoria
+     *
+     * @return  CategoryResponseDTO
+     */
+    public CategoryResponseDTO getCategoryById(Long id) {
+        var category = this.repository.findById(id);
 
         if (category.isEmpty()) {
             throw new ObjectNotFoundException("Categoria de id " + id + " não encontrado");
         }
 
-        return category.get();
+        return CategoryResponseDTO.fromEntity(category.get());
     }
 
+    /**
+     * Salva uma nova categoria
+     *
+     * @param   data    Dados para salvar a categoria
+     *
+     * @return  CategoryResponseDTO
+     */
     public CategoryResponseDTO saveCategory(CategoryRequestDTO data) {
-        Long userId = this.getCurrentUserId();
+        User user = this.getCurrentUser();
 
-        if (this.repository.existsByNameAndUserId(data.name(), userId)) {
+        if (this.repository.existsByNameAndUserId(data.name(), user.getId())) {
             throw new CategoryAlreadyExistsException("Já existe uma categoria com esse nome");
         }
 
         Category category = new Category();
         category.setName(data.name());
-        category.setUserId(userId);
+        category.setUser(user);
         category.setCategoryType(data.categoryType());
 
         Category categorySave = this.repository.save(category);
         return CategoryResponseDTO.fromEntity(categorySave);
     }
 
+    /**
+     * Atualiza uma categoria
+     *
+     * @param   id      Id da categoria a ser atualizada
+     * @param   data    Dados atualizados para a cateogoria
+     *
+     * @return  CategoryResponseDTO
+     */
     public CategoryResponseDTO updateCategory(Long id, CategoryUpadateDTO data) {
-        Category category = this.getCategoryById(id);
+        Optional<Category> category = this.repository.findById(id);
+
+        if (category.isEmpty()) {
+            throw new ObjectNotFoundException("Categoria de id " + id + " não encontrado");
+        }
+
+        Category categoryUpdate = category.get();
 
         if (data.name() != null) {
-            category.setName(data.name());
+            categoryUpdate.setName(data.name());
         }
 
         if (data.categoryType() != null) {
-            category.setCategoryType(data.categoryType());
+            categoryUpdate.setCategoryType(data.categoryType());
         }
 
-        this.repository.save(category);
+        this.repository.save(categoryUpdate);
 
-        return CategoryResponseDTO.fromEntity(category);
+        return CategoryResponseDTO.fromEntity(categoryUpdate);
     }
 
+    /**
+     * Deleta uma categoria
+     *
+     * @param   id  Id da categoria a ser deletada
+     */
     public void deleteCategory(Long id) {
         this.getCategoryById(id);
 
