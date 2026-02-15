@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
+import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.AccountAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
@@ -25,24 +26,25 @@ public class AccountService extends BaseService {
     @Autowired
     private BankRepository bankRepository;
 
-    public List<Account> getAccounts() {
-        return this.repository.findAll();
+    public List<AccountResponseDTO> getAccounts() {
+        Long userId = this.getCurrentUserId();
+        return this.repository.findAllAccountsByUserId(userId);
     }
 
-    public Account getAccountById(Long id) {
-        Optional<Account> account = this.repository.findById(id);
+    public AccountResponseDTO getAccountById(Long id) {
+        var account = this.repository.findById(id);
 
         if (account.isEmpty()) {
             throw new ObjectNotFoundException("Conta com id " + id + " não encontrado");
         }
 
-        return account.get();
+        return AccountResponseDTO.fromEntity(account.get());
     }
 
     public AccountResponseDTO saveAccount(AccountRequestDTO data) {
-        Long userId = this.getCurrentUserId();
+        User user = this.getCurrentUser();
 
-        if (this.repository.existsByBankIdAndUserId(data.bankId(), userId)) {
+        if (this.repository.existsByBankIdAndUserId(data.bankId(), user.getId())) {
             throw new AccountAlreadyExistsException("Já existe uma conta cadastrada com esse banco");
         }
 
@@ -55,9 +57,10 @@ public class AccountService extends BaseService {
 
         Account account = new Account();
         account.setDescription(data.description());
-        account.setBankId(data.bankId());
+        account.setBank(bank);
         account.setInitialBalance(data.initialBalance());
-        account.setUserId(userId);
+        account.setBalance(data.initialBalance());
+        account.setUser(user);
 
         Account accountSave = this.repository.save(account);
 
@@ -65,7 +68,13 @@ public class AccountService extends BaseService {
     }
 
     public AccountResponseDTO updateAccount(Long id, AccountUpdateDTO data) {
-        Account account = this.getAccountById(id);
+        var account = this.repository.findById(id);
+
+        if (account.isEmpty()) {
+            throw new ObjectNotFoundException("Conta com id " + id + " não encontrado");
+        }
+
+        Account accountUpdate = account.get();
 
         Long userId = this.getCurrentUserId();
 
@@ -77,20 +86,20 @@ public class AccountService extends BaseService {
             Bank bank = this.bankRepository.findById(data.bankId())
                     .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrado"));
 
-            account.setBankId(data.bankId());
+            accountUpdate.setBank(bank);
         }
 
         if (data.description() != null) {
-            account.setDescription(data.description());
+            accountUpdate.setDescription(data.description());
         }
 
         if (data.initialBalance() != null) {
-            account.setInitialBalance(data.initialBalance());
+            accountUpdate.setInitialBalance(data.initialBalance());
         }
 
-        this.repository.save(account);
+        this.repository.save(accountUpdate);
 
-        return AccountResponseDTO.fromEntity(account);
+        return AccountResponseDTO.fromEntity(accountUpdate);
     }
 
     public void deleteAccount(Long id) {

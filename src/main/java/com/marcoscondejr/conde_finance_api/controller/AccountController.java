@@ -20,14 +20,14 @@ public class AccountController {
     private AccountService service;
 
     @GetMapping
-    public ResponseEntity<List<Account>> getAccounts() {
-        List<Account> accounts = this.service.getAccounts();
+    public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
+        List<AccountResponseDTO> accounts = this.service.getAccounts();
         return ResponseEntity.status(HttpStatus.OK).body(accounts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable("id") String id) {
-        Account account = this.service.getAccountById(Long.parseLong(id));
+    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable("id") String id) {
+        AccountResponseDTO account = this.service.getAccountById(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
