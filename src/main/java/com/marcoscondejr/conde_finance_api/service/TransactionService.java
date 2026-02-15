@@ -13,6 +13,11 @@ public class TransactionService extends BaseService {
     @Autowired
     private TransactionRepository repository;
 
+    /**
+     * Lista as transações de um determinado usuário
+     *
+     * @return  List<TransactionResponseDTO>
+     */
     public List<TransactionResponseDTO> getTransactions() {
         Long userId = this.getCurrentUserId();
         return this.repository.findAllTransactionsByUser(userId);
