@@ -9,6 +9,7 @@ import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.AccountAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
+import com.marcoscondejr.conde_finance_api.mapper.AccountMapper;
 import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
 import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,43 @@ public class AccountService extends BaseService {
     @Autowired
     private BankRepository bankRepository;
 
+    @Autowired
+    private AccountMapper accountMapper;
+
+    /**
+     * Lista as contas de um determinado usuário
+     *
+     * @return  List<AccountResponseDTO>
+     */
     public List<AccountResponseDTO> getAccounts() {
         Long userId = this.getCurrentUserId();
-        return this.repository.findAllAccountsByUserId(userId);
+        return accountMapper.toDTOList(repository.findAllByUserId(userId));
     }
 
+    /**
+     * Busca uma determinada conta por Id
+     *
+     * @param   id  Id da conta
+     *
+     * @return  AccountResponseDTO
+     */
     public AccountResponseDTO getAccountById(Long id) {
         var account = this.repository.findById(id);
 
         if (account.isEmpty()) {
-            throw new ObjectNotFoundException("Conta com id " + id + " não encontrado");
+            throw new ObjectNotFoundException("Conta não encontrada");
         }
 
-        return AccountResponseDTO.fromEntity(account.get());
+        return accountMapper.toDTO(account.get());
     }
 
+    /**
+     * Salva uma nova conta
+     *
+     * @param   data    Dados da nova conta
+     *
+     * @return  AccountResponseDTO
+     */
     public AccountResponseDTO saveAccount(AccountRequestDTO data) {
         User user = this.getCurrentUser();
 
@@ -64,17 +87,20 @@ public class AccountService extends BaseService {
 
         Account accountSave = this.repository.save(account);
 
-        return AccountResponseDTO.fromEntity(accountSave);
+        return accountMapper.toDTO(accountSave);
     }
 
+    /**
+     * Atualiza uma determinada conta
+     *
+     * @param   id      Id da conta a ser editada
+     * @param   data    Dados a serem atualizados
+     *
+     * @return  AccountResponseDTO
+     */
     public AccountResponseDTO updateAccount(Long id, AccountUpdateDTO data) {
-        var account = this.repository.findById(id);
-
-        if (account.isEmpty()) {
-            throw new ObjectNotFoundException("Conta com id " + id + " não encontrado");
-        }
-
-        Account accountUpdate = account.get();
+        Account account = this.repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Conta não encontrada"));
 
         Long userId = this.getCurrentUserId();
 
@@ -86,24 +112,31 @@ public class AccountService extends BaseService {
             Bank bank = this.bankRepository.findById(data.bankId())
                     .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrado"));
 
-            accountUpdate.setBank(bank);
+            account.setBank(bank);
         }
 
         if (data.description() != null) {
-            accountUpdate.setDescription(data.description());
+            account.setDescription(data.description());
         }
 
         if (data.initialBalance() != null) {
-            accountUpdate.setInitialBalance(data.initialBalance());
+            account.setInitialBalance(data.initialBalance());
         }
 
-        this.repository.save(accountUpdate);
+        this.repository.save(account);
 
-        return AccountResponseDTO.fromEntity(accountUpdate);
+        return accountMapper.toDTO(account);
     }
 
+    /**
+     * Exclui uma conta por id
+     *
+     * @param   id  id da conta a ser excluida
+     */
     public void deleteAccount(Long id) {
-        this.getAccountById(id);
+        if (!this.repository.existsById(id)) {
+            throw new ObjectNotFoundException("Conta não encontrado");
+        };
 
         this.repository.deleteById(id);
     }

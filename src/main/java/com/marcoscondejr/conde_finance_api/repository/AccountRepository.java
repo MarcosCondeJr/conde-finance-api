@@ -10,18 +10,6 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    @Query("""
-        select new com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO(
-            a.id,
-            a.bank,
-            a.description,
-            a.initialBalance,
-            a.balance,
-            a.active
-        )
-        from Account a
-        where a.user.id = :userId
-    """)
-    List<AccountResponseDTO> findAllAccountsByUserId(Long userId);
+    List<Account> findAllByUserId(Long userId);
     Boolean existsByBankIdAndUserId(Long bankId, Long UserId);
 }
