@@ -4,11 +4,13 @@ import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.ERROR)
+import java.util.List;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BankMapper {
 
     BankResponseDTO toDTO(Bank bank);
+
+    List<BankResponseDTO> toDTOList(List<Bank> banks);
 }

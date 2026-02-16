@@ -1,6 +1,7 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.service.BankService;
@@ -20,28 +21,28 @@ public class BankController {
     private BankService service;
 
     @GetMapping
-    public ResponseEntity<List<Bank>> getBanks() {
-        List<Bank> banks = this.service.getBanks();
+    public ResponseEntity<List<BankResponseDTO>> getBanks() {
+        List<BankResponseDTO> banks = this.service.getBanks();
         return ResponseEntity.status(HttpStatus.OK).body(banks);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Bank> getBankById(@PathVariable("id") String id) {
-        Bank bank = this.service.getBankById(Long.parseLong(id));
+    public ResponseEntity<BankResponseDTO> getBankById(@PathVariable("id") String id) {
+        BankResponseDTO bank = this.service.getBankById(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.OK).body(bank);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveBank(@RequestBody @Valid BankRequestDTO data) {
-        Bank bank = this.service.saveBank(data);
+    public ResponseEntity<BankResponseDTO> saveBank(@RequestBody @Valid BankRequestDTO data) {
+        BankResponseDTO bank = this.service.saveBank(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(bank);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateBank(
+    public ResponseEntity<BankResponseDTO> updateBank(
             @PathVariable("id") String id, @RequestBody @Valid BankUpdateDTO data
     ) {
-        Bank bank = this.service.updateBank(Long.parseLong(id), data);
+        BankResponseDTO bank = this.service.updateBank(Long.parseLong(id), data);
         return ResponseEntity.status(HttpStatus.OK).body(bank);
     }
 

@@ -1,10 +1,12 @@
 package com.marcoscondejr.conde_finance_api.service;
 
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
+import com.marcoscondejr.conde_finance_api.mapper.BankMapper;
 import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +20,43 @@ public class BankService {
     @Autowired
     private BankRepository repository;
 
-    public List<Bank> getBanks() {
-        return this.repository.findAll();
+    @Autowired
+    private BankMapper bankMapper;
+
+    /**
+     * Lista todos os bancos
+     *
+     * @return  List<BankResponseDTO>
+     */
+    public List<BankResponseDTO> getBanks() {
+        return bankMapper.toDTOList(repository.findAll());
     }
 
-    public Bank getBankById(Long id) {
-        Optional<Bank> bank = this.repository.findById(id);
+    /**
+     * Busca um banco pelo Id
+     *
+     * @param   id  Id do banco
+     *
+     * @return  BankResponseDTO
+     */
+    public BankResponseDTO getBankById(Long id) {
+        var bank = this.repository.findById(id);
 
         if (bank.isEmpty()) {
-            throw new ObjectNotFoundException("Banco com id " + id + " não encontrado");
+            throw new ObjectNotFoundException("Banco não encontrado");
         }
 
-        return bank.get();
+        return bankMapper.toDTO(bank.get());
     }
 
-    public Bank saveBank(BankRequestDTO data) {
+    /**
+     * Salva um novo banco
+     *
+     * @param   data    Dados do novo banco
+     *
+     * @return  BankResponseDTO
+     */
+    public BankResponseDTO saveBank(BankRequestDTO data) {
         if (this.repository.existsByCode(data.code())) {
             throw new BankAlreadyExistsException("Já existe um banco com esse código");
         }
@@ -41,11 +65,22 @@ public class BankService {
         bank.setCode(data.code());
         bank.setName(data.name());
 
-        return this.repository.save(bank);
+        Bank savedBank = repository.save(bank);
+
+        return bankMapper.toDTO(savedBank);
     }
 
-    public Bank updateBank(Long id, BankUpdateDTO data) {
-        Bank bank = this.getBankById(id);
+    /**
+     * Atualiza um registro existente do banco
+     *
+     * @param   id      Id do banco a ser atualizado
+     * @param   data    Dados a serem atualizados
+     *
+     * @return  BankResponseDTO
+     */
+    public BankResponseDTO updateBank(Long id, BankUpdateDTO data) {
+        Bank bank = this.repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrado"));
 
         if (data.code() != null) {
             bank.setCode(data.code());
@@ -55,12 +90,19 @@ public class BankService {
             bank.setName(data.name());
         }
 
-        return this.repository.save(bank);
+        Bank updateBank = repository.save(bank);
+
+        return bankMapper.toDTO(updateBank);
     }
 
+    /**
+     * Exclui um determinado registro do banco
+     *
+     * @param   id  Id do banco a ser excluido
+     */
     public void deleteBank(Long id) {
         if (!this.repository.existsById(id)) {
-            throw new ObjectNotFoundException("Banco com id " + id + " não encontrado");
+            throw new ObjectNotFoundException("Banco não encontrado");
         }
 
         this.repository.deleteById(id);
