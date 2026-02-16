@@ -28,7 +28,7 @@ public record TransactionResponseDTO(
 
         BigDecimal amount
 ) {
-    public TransactionResponseDTO fromEntity(Transaction transaction) {
+    public static TransactionResponseDTO fromEntity(Transaction transaction) {
         return new TransactionResponseDTO(
                 transaction.getId(),
                 AccountResponseDTO.fromEntity(transaction.getAccount()),

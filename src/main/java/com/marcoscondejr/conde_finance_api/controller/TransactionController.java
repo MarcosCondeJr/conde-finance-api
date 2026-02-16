@@ -1,13 +1,13 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
+import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionResponseDTO;
 import com.marcoscondejr.conde_finance_api.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +22,13 @@ public class TransactionController {
     public ResponseEntity<List<TransactionResponseDTO>> getTransactions() {
         List<TransactionResponseDTO> transactions = this.service.getTransactions();
         return ResponseEntity.status(HttpStatus.OK).body(transactions);
+    }
+
+    @PostMapping
+    public ResponseEntity<TransactionResponseDTO> saveTransaction(
+            @RequestBody @Valid TransactionRequestDTO data
+    ) {
+        TransactionResponseDTO transaction = this.service.saveTransaction(data);
+        return ResponseEntity.status(HttpStatus.OK).body(transaction);
     }
 }
