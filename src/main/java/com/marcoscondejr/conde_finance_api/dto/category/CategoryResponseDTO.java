@@ -8,11 +8,4 @@ public record CategoryResponseDTO(
         String name,
         CategoryType categoryType
 ) {
-    public static CategoryResponseDTO fromEntity(Category category) {
-        return new CategoryResponseDTO(
-                category.getId(),
-                category.getName(),
-                category.getCategoryType()
-        );
-    }
 }

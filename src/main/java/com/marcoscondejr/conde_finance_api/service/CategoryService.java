@@ -7,18 +7,20 @@ import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.CategoryAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
+import com.marcoscondejr.conde_finance_api.mapper.CategoryMapper;
 import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService extends BaseService {
 
     @Autowired
     private CategoryRepository repository;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      * Lista todas as categorias de um determinado usuário
@@ -27,7 +29,7 @@ public class CategoryService extends BaseService {
      */
     public List<CategoryResponseDTO> getCategories() {
         Long userId = this.getCurrentUserId();
-        return this.repository.findAllByUserId(userId);
+        return categoryMapper.toDTOList(repository.findAllByUserId(userId));
     }
 
     /**
@@ -41,10 +43,10 @@ public class CategoryService extends BaseService {
         var category = this.repository.findById(id);
 
         if (category.isEmpty()) {
-            throw new ObjectNotFoundException("Categoria de id " + id + " não encontrado");
+            throw new ObjectNotFoundException("Categoria não encontrada");
         }
 
-        return CategoryResponseDTO.fromEntity(category.get());
+        return categoryMapper.toDTO(category.get());
     }
 
     /**
@@ -67,7 +69,7 @@ public class CategoryService extends BaseService {
         category.setCategoryType(data.categoryType());
 
         Category categorySave = this.repository.save(category);
-        return CategoryResponseDTO.fromEntity(categorySave);
+        return categoryMapper.toDTO(categorySave);
     }
 
     /**
@@ -79,25 +81,20 @@ public class CategoryService extends BaseService {
      * @return  CategoryResponseDTO
      */
     public CategoryResponseDTO updateCategory(Long id, CategoryUpadateDTO data) {
-        Optional<Category> category = this.repository.findById(id);
-
-        if (category.isEmpty()) {
-            throw new ObjectNotFoundException("Categoria de id " + id + " não encontrado");
-        }
-
-        Category categoryUpdate = category.get();
+        Category category = this.repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
 
         if (data.name() != null) {
-            categoryUpdate.setName(data.name());
+            category.setName(data.name());
         }
 
         if (data.categoryType() != null) {
-            categoryUpdate.setCategoryType(data.categoryType());
+            category.setCategoryType(data.categoryType());
         }
 
-        this.repository.save(categoryUpdate);
+        this.repository.save(category);
 
-        return CategoryResponseDTO.fromEntity(categoryUpdate);
+        return categoryMapper.toDTO(category);
     }
 
     /**
@@ -106,7 +103,9 @@ public class CategoryService extends BaseService {
      * @param   id  Id da categoria a ser deletada
      */
     public void deleteCategory(Long id) {
-        this.getCategoryById(id);
+        if (!this.repository.existsById(id)) {
+           throw new ObjectNotFoundException("Categoria não encontrada");
+        };
 
         this.repository.deleteById(id);
     }

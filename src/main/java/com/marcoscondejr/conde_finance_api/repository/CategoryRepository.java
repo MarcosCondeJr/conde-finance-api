@@ -10,16 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+    List<Category> findAllByUserId(Long userId);
 
-    @Query("""
-            select new com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO(
-                c.id,
-                c.name,
-                c.categoryType
-            )
-            from Category c
-            where c.user.id = :userId
-    """)
-    List<CategoryResponseDTO> findAllByUserId(Long userId);
     Boolean existsByNameAndUserId(String name, Long userId);
 }
