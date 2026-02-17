@@ -34,4 +34,9 @@ public class Account {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    public boolean hasInsufficientBalance(BigDecimal amount) {
+        return this.balance.compareTo(amount) < 0;
+    }
+
 }
