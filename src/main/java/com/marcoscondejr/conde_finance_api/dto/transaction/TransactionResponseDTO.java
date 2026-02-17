@@ -28,16 +28,16 @@ public record TransactionResponseDTO(
 
         BigDecimal amount
 ) {
-    public static TransactionResponseDTO fromEntity(Transaction transaction) {
-        return new TransactionResponseDTO(
-                transaction.getId(),
-                AccountResponseDTO.fromEntity(transaction.getAccount()),
-                CategoryResponseDTO.fromEntity(transaction.getCategory()),
-                transaction.getTransactionDate(),
-                transaction.getDescription(),
-                transaction.getTransactionType(),
-                transaction.getPaymentMethod(),
-                transaction.getAmount()
-        );
-    }
+//    public static TransactionResponseDTO fromEntity(Transaction transaction) {
+//        return new TransactionResponseDTO(
+//                transaction.getId(),
+//                AccountResponseDTO.fromEntity(transaction.getAccount()),
+//                CategoryResponseDTO.fromEntity(transaction.getCategory()),
+//                transaction.getTransactionDate(),
+//                transaction.getDescription(),
+//                transaction.getTransactionType(),
+//                transaction.getPaymentMethod(),
+//                transaction.getAmount()
+//        );
+//    }
 }

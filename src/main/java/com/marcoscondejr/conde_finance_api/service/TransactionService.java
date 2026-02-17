@@ -5,13 +5,17 @@ import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionResponseDT
 import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.entity.Transaction;
+import com.marcoscondejr.conde_finance_api.enums.CategoryType;
+import com.marcoscondejr.conde_finance_api.exception.BusinessException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
+import com.marcoscondejr.conde_finance_api.mapper.TransactionMapper;
 import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
 import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
 import com.marcoscondejr.conde_finance_api.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -26,6 +30,9 @@ public class TransactionService extends BaseService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private TransactionMapper transactionMapper;
+
     /**
      * Lista as transações de um determinado usuário
      *
@@ -33,7 +40,9 @@ public class TransactionService extends BaseService {
      */
     public List<TransactionResponseDTO> getTransactions() {
         Long userId = this.getCurrentUserId();
-        return this.repository.findAllTransactionsByUser(userId);
+        List<Transaction> transactions = repository.findByAccountUserId(userId);
+
+        return  transactionMapper.toDTOList(transactions);
     }
 
     /**
@@ -50,6 +59,22 @@ public class TransactionService extends BaseService {
         Category category = this.categoryRepository.findById(data.categoryId())
                 .orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada"));
 
+        if (data.transactionType() != category.getCategoryType()) {
+            throw new ObjectNotFoundException(
+                    "O tipo de transação informado não é compativel com o tipo de categoria");
+        }
+
+        if (data.transactionType() == CategoryType.EXPENSE &&
+                account.hasInsufficientBalance(data.amount())) {
+            throw new BusinessException("Saldo insuficiente para realizar a transação.");
+        }
+
+        BigDecimal newBalance = (data.transactionType() == CategoryType.EXPENSE) ?
+                account.getBalance().subtract(data.amount()) :
+                account.getBalance().add(data.amount());
+
+        account.setBalance(newBalance);
+
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setCategory(category);
@@ -60,7 +85,19 @@ public class TransactionService extends BaseService {
         transaction.setPaymentMethod(data.paymentMethod());
 
         Transaction savedTransaction = this.repository.save(transaction);
+        return transactionMapper.toDTO(savedTransaction);
+    }
 
-        return TransactionResponseDTO.fromEntity(savedTransaction);
+    /**
+     * Exclui uma determinada transação
+     *
+     * @param   id  Id da transação
+     */
+    public void deleteTransaction(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ObjectNotFoundException("Transação não encontrada");
+        }
+
+        repository.deleteById(id);
     }
 }
