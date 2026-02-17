@@ -95,6 +95,13 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusiness(
+            BusinessException ex
+    ) {
+        return this.buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse();
 

@@ -7,11 +7,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface TransactionMapper {
 
-    @Mapping(source = "account", target = "account")
-    @Mapping(source = "category", target = "category")
     TransactionResponseDTO toDTO(Transaction transaction);
+
+    List<TransactionResponseDTO> toDTOList(List<Transaction> transactions);
 }
