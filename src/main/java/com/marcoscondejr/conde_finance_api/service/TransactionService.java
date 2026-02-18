@@ -94,10 +94,24 @@ public class TransactionService extends BaseService {
      * @param   id  Id da transação
      */
     public void deleteTransaction(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ObjectNotFoundException("Transação não encontrada");
+        Transaction transaction = repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Transação não encontrada"));
+
+        Account account = transaction.getAccount();
+
+        if (transaction.getTransactionType() == CategoryType.REVENUE) {
+
+            BigDecimal newBalance = account.getBalance().subtract(transaction.getAmount());
+
+            if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BusinessException("Não é possivel excluir a transação, pois o saldo ficará negativo");
+            }
+
+            account.setBalance(newBalance);
+        } else {
+           account.setBalance(account.getBalance().add(transaction.getAmount()));
         }
 
-        repository.deleteById(id);
+        repository.delete(transaction);
     }
 }
