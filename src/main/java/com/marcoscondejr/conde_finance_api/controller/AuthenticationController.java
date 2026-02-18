@@ -8,6 +8,7 @@ import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.UserAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.infra.security.TokenService;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthenticationController {
 
     @Autowired

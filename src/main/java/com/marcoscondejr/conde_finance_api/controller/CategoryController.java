@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/category")
+@Tag(name = "Category")
 public class CategoryController {
 
     @Autowired

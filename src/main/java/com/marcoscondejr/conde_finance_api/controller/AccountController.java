@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController
+@RestController()
 @RequestMapping("/account")
+@Tag(name = "Account")
 public class AccountController {
 
     @Autowired

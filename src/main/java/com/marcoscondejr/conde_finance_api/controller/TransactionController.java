@@ -3,6 +3,7 @@ package com.marcoscondejr.conde_finance_api.controller;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionResponseDTO;
 import com.marcoscondejr.conde_finance_api.service.TransactionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
+@Tag(name = "Transaction")
 public class TransactionController {
 
     @Autowired
