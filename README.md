@@ -1,45 +1,109 @@
 # 💰 CondeFinance - API de Gestão Financeira
 
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![RestAPI](https://img.shields.io/badge/Rest%20API-005571?style=for-the-badge&logo=rest&logoColor=white)
-
-**CondeFinance** é uma API REST robusta desenvolvida em **Java puro**, focada na aplicação de conceitos avançados da linguagem. O projeto foi arquitetado para ser uma base sólida e escalável, facilitando uma migração futura para frameworks como Spring Boot.
-
-O sistema oferece controle financeiro pessoal completo, permitindo a gestão de usuários, categorias e lançamentos (receitas e despesas).
+**CondeFinance** é uma API REST desenvolvida com Spring Boot, voltada para gestão financeira pessoal.
+O sistema permite controle completo de contas, categorias e transações (receitas e despesas), aplicando boas práticas de arquitetura e regras consistentes de domínio financeiro.
 
 ---
 
 ## 🎯 Objetivos do Projeto
 
-* **Consolidar fundamentos:** Praticar Java 17+ sem dependências de frameworks de alto nível.
-* **Arquitetura Limpa:** Construir uma API REST do zero utilizando `com.sun.net.httpserver`.
-* **Domínio Técnico:** Aplicar padrões de projeto (SOLID), Generics para reaproveitamento de código e Streams para manipulação de dados.
-* **Persistência Real:** Implementar uma camada de acesso a dados (DAO) manual utilizando JDBC.
+* Consolidar conhecimentos em Spring Boot e arquitetura em camadas
+* Aplicar boas práticas de modelagem financeira
+* Implementar regras robustas de validação de saldo
+* Trabalhar com JPA, DTOs, Mappers e tratamento global de exceções
 
 ---
 
-## 🧠 Conceitos e Tecnologias Aplicadas
+## 🧠 Tecnologias Aplicadas
 
-* **POO & SOLID:** Princípios de responsabilidade única e inversão de dependência.
-* **Streams & Lambdas:** Processamento eficiente de coleções e filtragem de dados.
-* **JDBC:** Comunicação direta com o banco de dados via SQL.
-* **API REST:** Manipulação de verbos HTTP, status codes e JSON.
-* **Arquitetura em Camadas:** Separação clara entre Controller, Service, Repository e DTO.
+* Java 17+
+* Spring Boot 4
+* Spring Data JPA
+* Spring Security
+* PostgreSQL
+* Hibernate
+* Bean Validation (Jakarta Validation)
+* Maven
+* Flyway
 
 ---
 
 ## 🏗️ Estrutura do Projeto
 
+O projeto segue arquitetura em camadas:
+
+```controller → service → repository → entity```
+
 ```text
-src/
- ├── config/         # Configurações da documentação
- ├── controller/     # Handlers HTTP (Endpoints)
- ├── dto/            # Objetos de transferência (Request/Response)
- ├── entity/         # Entidades de domínio
- ├── enums/          # Enumerações
- ├── exception/      # Tratamento de erros customizados
- ├── infra/security  # Infraestrutura e segurança do projeto
- ├── repository/     # Camada de persistência (Interfaces e JDBC)
- ├── service/        # Regras de negócio e lógica de Streams
- └── CondeFinanceApiApplication.java    # Ponto de entrada
+src/main/java/com/marcoscondejr/conde_finance_api
+ ├── config/          # Configurações globais
+ ├── controller/      # Endpoints REST
+ ├── dto/             # Objetos de Request e Response
+ ├── entity/          # Entidades JPA
+ ├── enums/           # Enumerações do domínio
+ ├── exception/       # Exceptions customizadas e handler global
+ ├── infra/security/  # Configuração de segurança (JWT, filtros, etc.)
+ ├── mapper/          # Conversores Entity ↔ DTO
+ ├── repository/      # Interfaces JPA
+ ├── service/         # Regras de negócio
+ └── CondeFinanceApiApplication.java
+```
+
+## 💳 Funcionalidades
+
+* Cadastro de usuários
+* Gerenciamento de contas
+* Cadastro de categorias (Receita / Despesa)
+* Lançamentos financeiros (Transactions)
+* Validação automática de saldo
+* Regras consistentes de atualização de saldo
+* Segurança com autenticação
+
+## 💡 Regras de Negócio Importantes
+
+* O valor (amount) é sempre armazenado como positivo.
+* O impacto no saldo é calculado com base no transactionType.
+* Não é permitido que o saldo da conta fique negativo.
+* A edição de transações recalcula corretamente a diferença de saldo.
+
+## 🚀 Como Executar o Projeto
+
+### 1️⃣ Clonar o repositório
+
+```
+git clone https://github.com/marcoscondejr/conde-finance-api.git
+```
+
+### 2️⃣ Configurar o banco de dados
+
+Crie um banco PostgreSQL e configure o application.yml:
+
+```
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/conde_finance
+    username: postgres
+    password: sua_senha
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+```
+
+### 3️⃣ Rodar a aplicação
+
+```
+mvn spring-boot:run
+```
+
+Ou pela sua IDE executando:
+
+```
+CondeFinanceApiApplication
+```
+
+## 📚 Próximos Passos
+
+* Implementar paginação e filtros avançados
+* Adicionar relatórios financeiros
+* Criar testes automatizados (JUnit + Mockito)
