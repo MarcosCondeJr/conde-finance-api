@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record TransactionUpdateDTO(
-        Long accountId,
-
         Long categoryId,
 
         @PastOrPresent(message = "A data não pode ser maior que a data atual")
