@@ -48,7 +48,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new LoginResponseDTO(UserResponseDTO.fromEntity(user), token));
         } catch (Exception e) {
-            System.out.println("Esse é oerror: "+ e.getClass().getName());
+            System.out.println("Esse é error: "+ e.getClass().getName());
             throw e;
         }
     }
