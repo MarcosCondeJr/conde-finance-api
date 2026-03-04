@@ -21,7 +21,6 @@ public record UserRequestDTO(
         @Size(min = 8, message = "A Senha deve ter no mínimo 8 caracteres")
         String password,
 
-        @NotNull(message = "A função do usuário é obrigatório")
         UserRole role
 ) {
 }

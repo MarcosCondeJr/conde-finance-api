@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.auth.LoginResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.user.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.user.UserResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.User;
+import com.marcoscondejr.conde_finance_api.enums.UserRole;
 import com.marcoscondejr.conde_finance_api.exception.UserAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.infra.security.TokenService;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
@@ -54,17 +55,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserRequestDTO data) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO data) {
         if (this.repository.findByLogin(data.login()) != null) {
             throw new UserAlreadyExistsException();
         }
 
         String hashPassword = this.passwordEncoder.encode(data.password());
 
-        User newUser = new User(data.name(), data.email(), data.login(), hashPassword, data.role());
+        UserRole role = (data.role() != null ? data.role() : UserRole.USER);
+
+        User newUser = new User(data.name(), data.email(), data.login(), hashPassword, role);
 
         this.repository.save(newUser);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(UserResponseDTO.fromEntity(newUser));
     }
 }
