@@ -9,6 +9,8 @@ import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.mapper.BankMapper;
 import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +30,9 @@ public class BankService {
      *
      * @return  List<BankResponseDTO>
      */
-    public List<BankResponseDTO> getBanks() {
-        return bankMapper.toDTOList(repository.findAll());
+    public Page<BankResponseDTO> getBanks(Pageable pageable) {
+        Page<Bank> banks = repository.findAll(pageable));
+        return bankMapper.toDTOList(banks);
     }
 
     /**
