@@ -13,6 +13,8 @@ import com.marcoscondejr.conde_finance_api.mapper.AccountMapper;
 import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
 import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +37,10 @@ public class AccountService extends BaseService {
      *
      * @return  List<AccountResponseDTO>
      */
-    public List<AccountResponseDTO> getAccounts() {
+    public Page<AccountResponseDTO> getAccounts(Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        return accountMapper.toDTOList(repository.findAllByUserId(userId));
+        Page<Account> accounts = repository.findAllByUserId(pageable, userId);
+        return accounts.map(accountMapper::toDTO);
     }
 
     /**

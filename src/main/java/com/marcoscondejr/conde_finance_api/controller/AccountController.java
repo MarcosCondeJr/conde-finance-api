@@ -3,11 +3,13 @@ package com.marcoscondejr.conde_finance_api.controller;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
-import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +24,10 @@ public class AccountController {
     private AccountService service;
 
     @GetMapping
-    public ResponseEntity<List<AccountResponseDTO>> getAccounts() {
-        List<AccountResponseDTO> accounts = this.service.getAccounts();
+    public ResponseEntity<Page<AccountResponseDTO>> getAccounts(
+            @PageableDefault(page = 0, size = 2) Pageable pageable
+    ) {
+        Page<AccountResponseDTO> accounts = this.service.getAccounts(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(accounts);
     }
 
