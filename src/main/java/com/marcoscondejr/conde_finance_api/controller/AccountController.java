@@ -25,7 +25,7 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<Page<AccountResponseDTO>> getAccounts(
-            @PageableDefault(page = 0, size = 2) Pageable pageable
+            @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
         Page<AccountResponseDTO> accounts = this.service.getAccounts(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(accounts);

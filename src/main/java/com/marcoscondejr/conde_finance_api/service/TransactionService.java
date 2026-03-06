@@ -14,6 +14,8 @@ import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
 import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
 import com.marcoscondejr.conde_finance_api.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,11 +42,11 @@ public class TransactionService extends BaseService {
      *
      * @return  List<TransactionResponseDTO>
      */
-    public List<TransactionResponseDTO> getTransactions() {
+    public Page<TransactionResponseDTO> getTransactions(Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        List<Transaction> transactions = repository.findByAccountUserId(userId);
+        Page<Transaction> transactions = repository.findByAccountUserId(pageable, userId);
 
-        return  transactionMapper.toDTOList(transactions);
+        return transactions.map(transactionMapper::toDTO);
     }
 
     /**
