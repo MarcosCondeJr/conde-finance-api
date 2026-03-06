@@ -31,8 +31,8 @@ public class BankService {
      * @return  List<BankResponseDTO>
      */
     public Page<BankResponseDTO> getBanks(Pageable pageable) {
-        Page<Bank> banks = repository.findAll(pageable));
-        return bankMapper.toDTOList(banks);
+        Page<Bank> banks = repository.findAll(pageable);
+        return banks.map(bankMapper::toDTO);
     }
 
     /**
