@@ -10,6 +10,8 @@ import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.mapper.CategoryMapper;
 import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -27,9 +29,10 @@ public class CategoryService extends BaseService {
      *
      * @return  CategoryResponseDTO
      */
-    public List<CategoryResponseDTO> getCategories() {
+    public Page<CategoryResponseDTO> getCategories(Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        return categoryMapper.toDTOList(repository.findAllByUserId(userId));
+        Page<Category> categories = repository.findAllByUserId(pageable, userId);
+        return categories.map(categoryMapper::toDTO);
     }
 
     /**
