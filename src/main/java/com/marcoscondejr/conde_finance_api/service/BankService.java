@@ -34,7 +34,7 @@ public class BankService {
      * @return  List<BankResponseDTO>
      */
     public Page<BankResponseDTO> getBanks(BankFilter filter, Pageable pageable) {
-        Specification<Bank> spec = BankSpecification.withFilter(filter);
+        Specification<Bank> spec = BankSpecification.withFilters(filter);
 
         Page<Bank> banks = repository.findAll(spec, pageable);
         return banks.map(bankMapper::toDTO);
