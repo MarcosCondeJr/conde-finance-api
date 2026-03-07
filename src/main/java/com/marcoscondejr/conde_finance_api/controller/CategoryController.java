@@ -1,14 +1,18 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
+import com.marcoscondejr.conde_finance_api.Specification.CategorySpecification;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
+import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +30,9 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Page<CategoryResponseDTO>> getCategories(
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            CategoryFilter categoryFilter, @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
-        Page<CategoryResponseDTO> categories = this.service.getCategories(pageable);
+        Page<CategoryResponseDTO> categories = this.service.getCategories(categoryFilter, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 

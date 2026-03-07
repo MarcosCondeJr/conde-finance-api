@@ -1,5 +1,7 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.Specification.CategorySpecification;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
@@ -12,8 +14,8 @@ import com.marcoscondejr.conde_finance_api.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class CategoryService extends BaseService {
@@ -29,9 +31,12 @@ public class CategoryService extends BaseService {
      *
      * @return  CategoryResponseDTO
      */
-    public Page<CategoryResponseDTO> getCategories(Pageable pageable) {
+    public Page<CategoryResponseDTO> getCategories(CategoryFilter categoryFilter, Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        Page<Category> categories = repository.findAllByUserId(pageable, userId);
+
+        Specification<Category> spec = CategorySpecification.withFilters(userId, categoryFilter);
+
+        Page<Category> categories = repository.findAll(spec, pageable);
         return categories.map(categoryMapper::toDTO);
     }
 

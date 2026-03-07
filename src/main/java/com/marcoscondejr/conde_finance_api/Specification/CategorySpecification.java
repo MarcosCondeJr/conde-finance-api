@@ -1,22 +1,19 @@
 package com.marcoscondejr.conde_finance_api.Specification;
 
-import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
-import com.marcoscondejr.conde_finance_api.entity.Bank;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
+import com.marcoscondejr.conde_finance_api.entity.Category;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankSpecification {
-
-    public static Specification<Bank> withFilters (BankFilter filter) {
+public class CategorySpecification {
+    public static Specification<Category> withFilters(Long userId, CategoryFilter filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (filter.code() != null && !filter.code().isBlank()) {
-                predicates.add(cb.equal(root.get("code"), filter.code()));
-            }
+            predicates.add(cb.equal(root.get("user").get("id"), userId));
 
             if (filter.name() != null && !filter.name().isBlank()) {
                 predicates.add(
@@ -25,6 +22,10 @@ public class BankSpecification {
                                 "%" + filter.name().toLowerCase() + "%"
                         )
                 );
+            }
+
+            if (filter.categoryType() != null) {
+                predicates.add(cb.equal(root.get("categoryType"), filter.categoryType()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
