@@ -1,5 +1,7 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.Specification.TransactionSpecification;
+import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionFilter;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionUpdateDTO;
@@ -16,6 +18,7 @@ import com.marcoscondejr.conde_finance_api.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,9 +45,12 @@ public class TransactionService extends BaseService {
      *
      * @return  List<TransactionResponseDTO>
      */
-    public Page<TransactionResponseDTO> getTransactions(Pageable pageable) {
+    public Page<TransactionResponseDTO> getTransactions(TransactionFilter filter, Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        Page<Transaction> transactions = repository.findByAccountUserId(pageable, userId);
+
+        Specification<Transaction> spec = TransactionSpecification.withFilters(userId, filter);
+
+        Page<Transaction> transactions = repository.findAll(spec, pageable);
 
         return transactions.map(transactionMapper::toDTO);
     }
