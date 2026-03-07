@@ -1,5 +1,7 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.Specification.AccountSpecification;
+import com.marcoscondejr.conde_finance_api.dto.account.AccountFilter;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
@@ -15,6 +17,7 @@ import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,9 +40,12 @@ public class AccountService extends BaseService {
      *
      * @return  List<AccountResponseDTO>
      */
-    public Page<AccountResponseDTO> getAccounts(Pageable pageable) {
+    public Page<AccountResponseDTO> getAccounts(AccountFilter filter, Pageable pageable) {
         Long userId = this.getCurrentUserId();
-        Page<Account> accounts = repository.findAllByUserId(pageable, userId);
+
+        Specification<Account> spec = AccountSpecification.withFilters(userId, filter);
+
+        Page<Account> accounts = repository.findAll(spec, pageable);
         return accounts.map(accountMapper::toDTO);
     }
 
