@@ -1,5 +1,6 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
+import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
@@ -27,9 +28,9 @@ public class BankController {
 
     @GetMapping
     public ResponseEntity<Page<BankResponseDTO>> getBanks(
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            BankFilter filter, @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
-        Page<BankResponseDTO> banks = this.service.getBanks(pageable);
+        Page<BankResponseDTO> banks = this.service.getBanks(filter, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(banks);
     }
 

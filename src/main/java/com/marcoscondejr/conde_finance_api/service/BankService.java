@@ -1,5 +1,7 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.Specification.BankSpecification;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
@@ -11,6 +13,7 @@ import com.marcoscondejr.conde_finance_api.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +33,10 @@ public class BankService {
      *
      * @return  List<BankResponseDTO>
      */
-    public Page<BankResponseDTO> getBanks(Pageable pageable) {
-        Page<Bank> banks = repository.findAll(pageable);
+    public Page<BankResponseDTO> getBanks(BankFilter filter, Pageable pageable) {
+        Specification<Bank> spec = BankSpecification.withFilter(filter);
+
+        Page<Bank> banks = repository.findAll(spec, pageable);
         return banks.map(bankMapper::toDTO);
     }
 
