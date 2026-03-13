@@ -8,6 +8,7 @@ import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.service.BankService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bank")
+@RequestMapping("/api/bank")
 @Tag(name = "Bank")
 public class BankController {
 
@@ -28,7 +29,8 @@ public class BankController {
 
     @GetMapping
     public ResponseEntity<Page<BankResponseDTO>> getBanks(
-            BankFilter filter, @PageableDefault(page = 0, size = 10) Pageable pageable
+            BankFilter filter,
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
     ) {
         Page<BankResponseDTO> banks = this.service.getBanks(filter, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(banks);
