@@ -104,6 +104,5 @@ CondeFinanceApiApplication
 
 ## 📚 Próximos Passos
 
-* Implementar paginação e filtros avançados
 * Adicionar relatórios financeiros
 * Criar testes automatizados (JUnit + Mockito)
