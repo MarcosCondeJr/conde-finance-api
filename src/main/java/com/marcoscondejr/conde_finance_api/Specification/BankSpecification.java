@@ -15,7 +15,11 @@ public class BankSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             if (filter.code() != null && !filter.code().isBlank()) {
-                predicates.add(cb.equal(root.get("code"), filter.code()));
+                predicates.add(
+                        cb.like(
+                            cb.lower(root.get("code")),
+                            "%" + filter.code().toLowerCase() + "%"
+                ));
             }
 
             if (filter.name() != null && !filter.name().isBlank()) {
@@ -24,6 +28,12 @@ public class BankSpecification {
                                 cb.lower(root.get("name")),
                                 "%" + filter.name().toLowerCase() + "%"
                         )
+                );
+            }
+
+            if (filter.active() != null) {
+                predicates.add(
+                        cb.equal(root.get("active"), filter.active())
                 );
             }
 

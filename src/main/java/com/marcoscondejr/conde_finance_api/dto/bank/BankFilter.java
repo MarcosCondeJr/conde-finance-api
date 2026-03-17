@@ -6,6 +6,8 @@ import lombok.Setter;
 public record BankFilter(
         String code,
 
-        String name
+        String name,
+
+        Boolean active
 ) {
 }
