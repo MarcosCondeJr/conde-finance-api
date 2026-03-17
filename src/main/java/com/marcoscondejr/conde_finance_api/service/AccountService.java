@@ -1,6 +1,6 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.Specification.AccountSpecification;
+import com.marcoscondejr.conde_finance_api.specification.AccountSpecification;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountFilter;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
@@ -9,7 +9,6 @@ import com.marcoscondejr.conde_finance_api.entity.Account;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.exception.AccountAlreadyExistsException;
-import com.marcoscondejr.conde_finance_api.exception.BankAlreadyExistsException;
 import com.marcoscondejr.conde_finance_api.exception.ObjectNotFoundException;
 import com.marcoscondejr.conde_finance_api.mapper.AccountMapper;
 import com.marcoscondejr.conde_finance_api.repository.AccountRepository;
@@ -19,9 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService extends BaseService {

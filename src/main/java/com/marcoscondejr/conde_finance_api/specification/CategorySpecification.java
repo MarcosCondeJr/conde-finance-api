@@ -1,4 +1,4 @@
-package com.marcoscondejr.conde_finance_api.Specification;
+package com.marcoscondejr.conde_finance_api.specification;
 
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.entity.Category;

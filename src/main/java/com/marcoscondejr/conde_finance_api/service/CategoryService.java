@@ -1,6 +1,6 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.Specification.CategorySpecification;
+import com.marcoscondejr.conde_finance_api.specification.CategorySpecification;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;

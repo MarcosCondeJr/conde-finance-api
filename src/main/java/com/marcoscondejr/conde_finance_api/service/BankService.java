@@ -1,6 +1,6 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.Specification.BankSpecification;
+import com.marcoscondejr.conde_finance_api.specification.BankSpecification;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
@@ -15,9 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BankService {

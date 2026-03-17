@@ -1,6 +1,6 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.Specification.TransactionSpecification;
+import com.marcoscondejr.conde_finance_api.specification.TransactionSpecification;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionFilter;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.transaction.TransactionResponseDTO;
@@ -22,7 +22,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 
 @Service
