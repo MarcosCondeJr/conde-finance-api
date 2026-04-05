@@ -19,6 +19,21 @@ public class AccountSpecification {
                 predicates.add(cb.equal(root.get("bank").get("id"), filter.bankId()));
             }
 
+            if (filter.description() != null && !filter.description().isBlank()) {
+                predicates.add(
+                        cb.like(
+                                cb.lower(root.get("description")),
+                                "%" + filter.description().toLowerCase() + "%"
+                        )
+                );
+            }
+
+            if (filter.active() != null) {
+                predicates.add(
+                        cb.equal(root.get("active"), filter.active())
+                );
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
