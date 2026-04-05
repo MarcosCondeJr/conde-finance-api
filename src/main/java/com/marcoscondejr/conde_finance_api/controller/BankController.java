@@ -6,6 +6,9 @@ import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankUpdateDTO;
 import com.marcoscondejr.conde_finance_api.entity.Bank;
 import com.marcoscondejr.conde_finance_api.service.BankService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -28,8 +31,15 @@ public class BankController {
     private BankService service;
 
     @GetMapping
+    @Operation(summary = "Listar bancos")
+    @Parameters({
+            @Parameter(name = "page", description = "Número da página", example = "0"),
+            @Parameter(name = "size", description = "Quantidade de registros por página", example = "10"),
+            @Parameter(name = "sort", description = "Ordenação no formato campo,direcao", example = "id,asc")
+    })
     public ResponseEntity<Page<BankResponseDTO>> getBanks(
-            BankFilter filter,
+            @ParameterObject BankFilter filter,
+            @Parameter(hidden = true)
             @ParameterObject @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
     ) {
         Page<BankResponseDTO> banks = this.service.getBanks(filter, pageable);
