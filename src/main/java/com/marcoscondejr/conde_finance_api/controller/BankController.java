@@ -31,7 +31,7 @@ public class BankController {
     private BankService service;
 
     @GetMapping
-    @Operation(summary = "Listar bancos")
+    @Operation(summary = "Listar bancos com paginação e filtros")
     @Parameters({
             @Parameter(name = "page", description = "Número da página", example = "0"),
             @Parameter(name = "size", description = "Quantidade de registros por página", example = "10"),
@@ -70,5 +70,12 @@ public class BankController {
     public ResponseEntity<?> deleteBank(@PathVariable("id") String id) {
         this.service.deleteBank(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/options")
+    @Operation(summary = "Listar todos os bancos sem filtro e paginação")
+    public ResponseEntity<List<BankResponseDTO>> getBankOptions() {
+        List<BankResponseDTO> banks = this.service.getBanksOptions();
+        return ResponseEntity.status(HttpStatus.OK).body(banks);
     }
 }

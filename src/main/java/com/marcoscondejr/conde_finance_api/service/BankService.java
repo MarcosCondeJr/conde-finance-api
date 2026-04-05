@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BankService {
 
@@ -26,7 +28,8 @@ public class BankService {
     private BankMapper bankMapper;
 
     /**
-     * Lista todos os bancos
+     * Lista os bancos com paginação e
+     * filtros
      *
      * @return  List<BankResponseDTO>
      */
@@ -35,6 +38,15 @@ public class BankService {
 
         Page<Bank> banks = repository.findAll(spec, pageable);
         return banks.map(bankMapper::toDTO);
+    }
+
+    /**
+     * Lista todos os bancos para opções
+     *
+     * @return  List<BankResponseDTO>
+     */
+    public List<BankResponseDTO> getBanksOptions() {
+        return bankMapper.toDTOList(repository.findAll());
     }
 
     /**
