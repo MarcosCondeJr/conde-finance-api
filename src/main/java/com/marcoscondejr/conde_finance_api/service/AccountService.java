@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountService extends BaseService {
 
@@ -144,5 +146,16 @@ public class AccountService extends BaseService {
         };
 
         this.repository.deleteById(id);
+    }
+
+    /**
+     * Retorna as options de account, para usar nos formulário
+     *
+     * @return  List<AccountResponseDTO>
+     */
+    public List<AccountResponseDTO> getAccountOptions() {
+        Long userId = this.getCurrentUserId();
+
+        return accountMapper.toDTOList(repository.findAllByActiveAndUserId(true, userId));
     }
 }

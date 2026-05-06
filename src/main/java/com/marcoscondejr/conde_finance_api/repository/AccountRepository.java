@@ -15,4 +15,5 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
     Page<Account> findAllByUserId(Pageable pageable, Long userId);
     Boolean existsByBankIdAndUserId(Long bankId, Long UserId);
+    List<Account> findAllByActiveAndUserId(boolean active, Long userId);
 }

@@ -5,6 +5,7 @@ import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,12 @@ public class AccountController {
     public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
         this.service.deleteAccount(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/options")
+    @Operation(summary = "Listar todos as contas ativas e sem filtro e paginação")
+    public ResponseEntity<List<AccountResponseDTO>> getBankOptions() {
+        List<AccountResponseDTO> accounts = this.service.getAccountOptions();
+        return ResponseEntity.status(HttpStatus.OK).body(accounts);
     }
 }
