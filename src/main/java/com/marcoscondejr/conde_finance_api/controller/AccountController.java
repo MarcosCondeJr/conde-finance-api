@@ -4,10 +4,14 @@ import com.marcoscondejr.conde_finance_api.dto.account.AccountFilter;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +30,15 @@ public class AccountController {
     private AccountService service;
 
     @GetMapping
+    @Parameters({
+            @Parameter(name = "page", description = "Número da página", example = "0"),
+            @Parameter(name = "size", description = "Quantidade de registros por página", example = "10"),
+            @Parameter(name = "sort", description = "Ordenação no formato campo,direcao", example = "id,asc")
+    })
     public ResponseEntity<Page<AccountResponseDTO>> getAccounts(
-            AccountFilter filter, @PageableDefault(page = 0, size = 10) Pageable pageable
+            @ParameterObject AccountFilter filter,
+            @Parameter(hidden = true)
+            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "Id") Pageable pageable
     ) {
         Page<AccountResponseDTO> accounts = this.service.getAccounts(filter, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(accounts);
