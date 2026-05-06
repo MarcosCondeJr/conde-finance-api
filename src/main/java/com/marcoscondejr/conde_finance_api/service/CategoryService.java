@@ -1,5 +1,6 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.specification.CategorySpecification;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService extends BaseService {
@@ -116,5 +119,11 @@ public class CategoryService extends BaseService {
         };
 
         this.repository.deleteById(id);
+    }
+
+    public List<CategoryResponseDTO> getCategoryOptions() {
+        Long userId = this.getCurrentUserId();
+
+        return categoryMapper.toDTOList(repository.findAllByUserId(userId));
     }
 }

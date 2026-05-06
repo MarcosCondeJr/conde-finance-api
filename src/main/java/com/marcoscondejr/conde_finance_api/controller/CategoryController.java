@@ -1,10 +1,13 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
+import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryUpadateDTO;
 import com.marcoscondejr.conde_finance_api.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api/category")
@@ -55,5 +60,12 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable("id") String id) {
         this.service.deleteCategory(Long.parseLong(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/options")
+    @Operation(summary = "Listar todos as categorias sem filtro e paginação")
+    public ResponseEntity<List<CategoryResponseDTO>> getCategoryOptions() {
+        List<CategoryResponseDTO> categorys = this.service.getCategoryOptions();
+        return ResponseEntity.status(HttpStatus.OK).body(categorys);
     }
 }
