@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: MarcosCondeJr/conde-finance-api
+  IMAGE_NAME: marcoscondejr/conde-finance-api
 
 jobs:
 
