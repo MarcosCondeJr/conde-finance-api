@@ -9,7 +9,7 @@ env:
   CONTAINER_NAME: condefinance-backend
   HOST_PORT: 8080
   CONTAINER_PORT: 8080
-  ENV_FILE: /home/apps/condefinance-api.env
+  ENV_FILE: /home/ubuntu/apps/condefinance-api.env
 
 jobs:
 
