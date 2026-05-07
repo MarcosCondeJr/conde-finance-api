@@ -9,6 +9,7 @@ env:
   CONTAINER_NAME: condefinance-backend
   HOST_PORT: 8080
   CONTAINER_PORT: 8080
+  ENV_FILE: /home/apps/condefinance-api.env
 
 jobs:
 
@@ -80,6 +81,7 @@ jobs:
               --name ${{ env.CONTAINER_NAME }} \
               --restart unless-stopped \
               --memory=512m \
+              --env-file ${{ env.ENV_FILE }} \
               -p ${{ env.HOST_PORT }}:${{ env.CONTAINER_PORT }} \
               ghcr.io/${{ env.IMAGE_NAME }}:latest
 
