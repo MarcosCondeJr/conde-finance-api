@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: marcoscondejr/conde-finance-api
-  CONTAINER_NAME: condefinance-api
+  CONTAINER_NAME: condefinance-backend
   CONTAINER_PORT: 8080
 
 jobs:
@@ -65,3 +65,5 @@ jobs:
               --memory=512m \
               -p ${{ env.HOST_PORT }}:${{ env.CONTAINER_PORT }} \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            
+            docker image prune -a -f
