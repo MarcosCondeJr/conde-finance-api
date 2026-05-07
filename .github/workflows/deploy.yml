@@ -8,6 +8,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: marcoscondejr/conde-finance-api
   CONTAINER_NAME: condefinance-backend
+  HOST_PORT: 8080
   CONTAINER_PORT: 8080
 
 jobs:
