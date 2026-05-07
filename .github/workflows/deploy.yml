@@ -7,26 +7,28 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: marcoscondejr/conde-finance-api
+  CONTAINER_NAME: condefinance-api
+  CONTAINER_PORT: 8080
 
 jobs:
-
   build-and-push:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login GHCR
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push
+      - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -36,12 +38,11 @@ jobs:
   deploy:
 
     needs: build-and-push
-
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Deploy VPS
+      - name: Deploy Via SSH
         uses: appleboy/ssh-action@v1.0.3
 
         with:
@@ -51,8 +52,16 @@ jobs:
 
           script: |
 
-            cd ~/apps/condefinance
+            docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-            docker compose pull backend
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-            docker compose up -d backend
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
+
+            docker run -d \
+              --name ${{ env.CONTAINER_NAME }} \
+              --restart unless-stopped \
+              --memory=512m \
+              -p ${{ env.HOST_PORT }}:${{ env.CONTAINER_PORT }} \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
