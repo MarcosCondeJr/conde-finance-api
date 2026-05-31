@@ -9,6 +9,7 @@ import com.marcoscondejr.conde_finance_api.service.BankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -77,5 +78,21 @@ public class BankController {
     public ResponseEntity<List<BankResponseDTO>> getBankOptions() {
         List<BankResponseDTO> banks = this.service.getBanksOptions();
         return ResponseEntity.status(HttpStatus.OK).body(banks);
+    }
+
+    @PatchMapping("/{id}/{status}")
+    public ResponseEntity<BankResponseDTO> updateStatus(
+            @PathVariable String id,
+            @PathVariable
+            @Schema(
+                    description = "Status do banco",
+                    allowableValues = {"true", "false"},
+                    example = "true"
+            )
+            String status
+    ) {
+        BankResponseDTO bank = service.updateStatus(Long.parseLong(id),
+                Boolean.parseBoolean(status));
+        return ResponseEntity.ok(bank);
     }
 }
