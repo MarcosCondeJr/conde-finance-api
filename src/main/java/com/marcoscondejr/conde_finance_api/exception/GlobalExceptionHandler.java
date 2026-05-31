@@ -40,7 +40,12 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.UNAUTHORIZED, "Login ou senha inválidos.");
     }
 
-    @ExceptionHandler({TokenCreationException.class, InvalidTokenException.class})
+    @ExceptionHandler({UnauthorizedAccessException.class})
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAccess(Exception ex) {
+        return this.buildError(HttpStatus.UNAUTHORIZED, "Usuário não autenticado.");
+    }
+
+    @ExceptionHandler({TokenCreationException.class, InvalidTokenException.class, ForbiddenException.class})
     public ResponseEntity<ErrorResponse> handleTokenErrors(RuntimeException ex) {
         return this.buildError(HttpStatus.FORBIDDEN, ex.getMessage());
     }
