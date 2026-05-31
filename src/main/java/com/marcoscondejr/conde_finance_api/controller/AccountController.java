@@ -5,10 +5,12 @@ import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountUpdateDTO;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
+import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -75,5 +77,22 @@ public class AccountController {
     public ResponseEntity<List<AccountResponseDTO>> getBankOptions() {
         List<AccountResponseDTO> accounts = this.service.getAccountOptions();
         return ResponseEntity.status(HttpStatus.OK).body(accounts);
+    }
+
+    @PatchMapping("/{id}/{status}")
+    public ResponseEntity<AccountResponseDTO> updateStatus(
+            @PathVariable String id,
+            @PathVariable
+            @Schema(
+                    description = "Status do banco",
+                    allowableValues = {"true", "false"},
+                    example = "true"
+            )
+            String status
+    ) {
+        AccountResponseDTO account = service.updateStatus(
+                Long.parseLong(id),
+                Boolean.parseBoolean(status));
+        return ResponseEntity.ok(account);
     }
 }
