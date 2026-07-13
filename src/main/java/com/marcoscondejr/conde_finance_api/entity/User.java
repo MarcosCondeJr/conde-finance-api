@@ -28,6 +28,9 @@ public class User implements UserDetails {
     private String login;
     private String password;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

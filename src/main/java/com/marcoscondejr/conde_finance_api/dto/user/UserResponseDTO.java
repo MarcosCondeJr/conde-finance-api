@@ -8,7 +8,8 @@ public record UserResponseDTO(
         String name,
         String email,
         String login,
-        UserRole role
+        UserRole role,
+        boolean active
 ) {
     public static UserResponseDTO fromEntity(User user) {
         return new UserResponseDTO(
@@ -16,7 +17,8 @@ public record UserResponseDTO(
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getRole()
+                user.getRole(),
+                user.isActive()
         );
     }
 }
