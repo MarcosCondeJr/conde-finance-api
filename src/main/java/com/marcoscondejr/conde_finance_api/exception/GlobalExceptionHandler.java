@@ -102,6 +102,13 @@ public class GlobalExceptionHandler {
         return this.buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(
+            BusinessException ex
+    ) {
+        return this.buildError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse();
 
