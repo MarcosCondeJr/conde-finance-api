@@ -1,5 +1,9 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
+import com.marcoscondejr.conde_finance_api.entity.Transaction;
+import com.marcoscondejr.conde_finance_api.exception.BusinessException;
+import com.marcoscondejr.conde_finance_api.repository.TransactionRepository;
 import com.marcoscondejr.conde_finance_api.specification.AccountSpecification;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountFilter;
 import com.marcoscondejr.conde_finance_api.dto.account.AccountRequestDTO;
@@ -29,6 +33,9 @@ public class AccountService extends BaseService {
 
     @Autowired
     private BankRepository bankRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private AccountMapper accountMapper;
@@ -112,7 +119,7 @@ public class AccountService extends BaseService {
         Long userId = this.getCurrentUserId();
 
         if (data.bankId() != null) {
-            if (this.repository.existsByBankIdAndUserId(data.bankId(), userId)) {
+            if (this.repository.existsByBankIdAndUserIdAndIdNot(data.bankId(), userId, id)) {
                 throw new AccountAlreadyExistsException("Já existe uma conta cadastrada com esse banco");
             }
 
@@ -127,7 +134,14 @@ public class AccountService extends BaseService {
         }
 
         if (data.initialBalance() != null) {
+            List<Transaction> transactions = transactionRepository.findByAccountId(id);
+
+            if (!transactions.isEmpty()) {
+                throw new BusinessException("Não é possivel alterar o valor inicial da conta, pois existe transações.");
+            }
+
             account.setInitialBalance(data.initialBalance());
+            account.setBalance(data.initialBalance());
         }
 
         this.repository.save(account);
@@ -157,5 +171,27 @@ public class AccountService extends BaseService {
         Long userId = this.getCurrentUserId();
 
         return accountMapper.toDTOList(repository.findAllByActiveAndUserId(true, userId));
+    }
+
+    /**
+     * Atualiza o status de um banco, ativando ou inativando
+     *
+     * @param   id      Id do banco
+     * @param   active  tipo de status, true -> ativo, false -> inativo
+     */
+    public AccountResponseDTO updateStatus(Long id, Boolean active) {
+        Account account = repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Conta não encontrata."));
+
+        if ((account.isActive() && active) || (!account.isActive() && !active)) {
+            throw new BusinessException(
+                    "O Banco já está " + (active ? "ativo" : "inativo")
+            );
+        }
+
+        account.setActive(active);
+        repository.save(account);
+
+        return accountMapper.toDTO(account);
     }
 }

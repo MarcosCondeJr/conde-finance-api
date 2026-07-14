@@ -1,9 +1,10 @@
 package com.marcoscondejr.conde_finance_api.controller;
 
-import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
-import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
+import com.marcoscondejr.conde_finance_api.dto.category.CategoryFilter;
+import com.marcoscondejr.conde_finance_api.dto.user.UserFilter;
 import com.marcoscondejr.conde_finance_api.dto.user.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.user.UserResponseDTO;
+import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,8 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 @Tag(name = "User")
 public class UserController {
 
@@ -28,23 +31,18 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    @Operation(summary = "Listar usuários com paginação e filtros")
+    @Operation(summary = "Listar todos os usuários do sistema")
     @Parameters({
             @Parameter(name = "page", description = "Número da página", example = "0"),
             @Parameter(name = "size", description = "Quantidade de registros por página", example = "10"),
             @Parameter(name = "sort", description = "Ordenação no formato campo,direcao", example = "id,asc")
     })
     public ResponseEntity<Page<UserResponseDTO>> getUsers(
-            @ParameterObject BankFilter filter,
+            @ParameterObject UserFilter userFilter,
             @Parameter(hidden = true)
-            @ParameterObject @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable
+            @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
-        Page<UserResponseDTO> banks = this.service.getAll(filter, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(banks);
-    }
-
-    @PostMapping
-    public String createUser(@Valid @RequestBody UserRequestDTO user) {
-        return this.service.createUser(user);
+        Page<UserResponseDTO> users = this.service.getAllUsers(userFilter, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }

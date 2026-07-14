@@ -1,5 +1,9 @@
 package com.marcoscondejr.conde_finance_api.dto.user;
 
-public class UserFilter(
+public record UserFilter(
+        String login,
+        String email,
+        String username
+
 ) {
 }

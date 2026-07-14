@@ -1,8 +1,6 @@
 package com.marcoscondejr.conde_finance_api.dto.account;
 
 import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
-import com.marcoscondejr.conde_finance_api.entity.Account;
-import com.marcoscondejr.conde_finance_api.entity.Bank;
 
 import java.math.BigDecimal;
 

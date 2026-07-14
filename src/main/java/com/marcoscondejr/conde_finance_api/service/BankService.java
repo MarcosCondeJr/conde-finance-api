@@ -1,5 +1,8 @@
 package com.marcoscondejr.conde_finance_api.service;
 
+import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
+import com.marcoscondejr.conde_finance_api.entity.Account;
+import com.marcoscondejr.conde_finance_api.exception.BusinessException;
 import com.marcoscondejr.conde_finance_api.specification.BankSpecification;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankFilter;
 import com.marcoscondejr.conde_finance_api.dto.bank.BankRequestDTO;
@@ -123,5 +126,27 @@ public class BankService {
         }
 
         this.repository.deleteById(id);
+    }
+
+    /**
+     * Atualiza o status de um banco, ativando ou inativando
+     *
+     * @param   id      Id do banco
+     * @param   active  tipo de status, true -> ativo, false -> inativo
+     */
+    public BankResponseDTO updateStatus(Long id, Boolean active) {
+        Bank bank = repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Banco não encontrato."));
+
+        if (bank.getActive().equals(active)) {
+            throw new BusinessException(
+                    "O Banco já está " + (active ? "ativo" : "inativo")
+            );
+        }
+
+        bank.setActive(active);
+        repository.save(bank);
+
+        return bankMapper.toDTO(bank);
     }
 }
