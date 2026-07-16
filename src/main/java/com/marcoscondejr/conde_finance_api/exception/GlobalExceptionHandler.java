@@ -1,6 +1,5 @@
 package com.marcoscondejr.conde_finance_api.exception;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

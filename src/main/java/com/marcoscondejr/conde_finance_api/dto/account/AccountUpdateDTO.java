@@ -1,6 +1,5 @@
 package com.marcoscondejr.conde_finance_api.dto.account;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 

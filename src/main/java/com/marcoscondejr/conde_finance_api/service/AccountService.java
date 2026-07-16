@@ -1,6 +1,5 @@
 package com.marcoscondejr.conde_finance_api.service;
 
-import com.marcoscondejr.conde_finance_api.dto.bank.BankResponseDTO;
 import com.marcoscondejr.conde_finance_api.entity.Transaction;
 import com.marcoscondejr.conde_finance_api.exception.BusinessException;
 import com.marcoscondejr.conde_finance_api.repository.TransactionRepository;

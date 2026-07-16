@@ -1,16 +1,13 @@
 package com.marcoscondejr.conde_finance_api.service;
 
 import com.marcoscondejr.conde_finance_api.dto.user.UserFilter;
-import com.marcoscondejr.conde_finance_api.dto.user.UserRequestDTO;
 import com.marcoscondejr.conde_finance_api.dto.user.UserResponseDTO;
-import com.marcoscondejr.conde_finance_api.entity.Category;
 import com.marcoscondejr.conde_finance_api.entity.User;
 import com.marcoscondejr.conde_finance_api.enums.UserRole;
 import com.marcoscondejr.conde_finance_api.exception.ForbiddenException;
 import com.marcoscondejr.conde_finance_api.exception.UnauthorizedAccessException;
 import com.marcoscondejr.conde_finance_api.mapper.UserMapper;
 import com.marcoscondejr.conde_finance_api.repository.UserRepository;
-import com.marcoscondejr.conde_finance_api.specification.CategorySpecification;
 import com.marcoscondejr.conde_finance_api.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class UserService extends BaseService {

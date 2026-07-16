@@ -2,9 +2,6 @@ package com.marcoscondejr.conde_finance_api.dto.transaction;
 
 import com.marcoscondejr.conde_finance_api.dto.account.AccountResponseDTO;
 import com.marcoscondejr.conde_finance_api.dto.category.CategoryResponseDTO;
-import com.marcoscondejr.conde_finance_api.entity.Account;
-import com.marcoscondejr.conde_finance_api.entity.Category;
-import com.marcoscondejr.conde_finance_api.entity.Transaction;
 import com.marcoscondejr.conde_finance_api.enums.CategoryType;
 import com.marcoscondejr.conde_finance_api.enums.PaymentMethod;
 
